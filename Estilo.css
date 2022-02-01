@@ -1,12 +1,19 @@
+.fondo {
+    background-image:url(Flying_Journey.png);
+     background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.header .navbar {
+    background-color: transparent !important;
+  }
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-h1{
-    text-align: center;
-    margin-top: 10px;
 }
 
 .container-card{
@@ -17,9 +24,9 @@ h1{
 }
 
 .card{
-    border: 2px solid black; 
+    border: 2px solid gold; 
     width: 300px;
-    height: 395px;
+    height: 500px;
     background-color: red;
     margin: 10px;
     border-radius: 5px;

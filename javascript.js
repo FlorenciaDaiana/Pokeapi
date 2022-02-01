@@ -1,36 +1,59 @@
-let pokemonsList = document.getElementById("pokemons-list");
+var pokeApi = "https://pokeapi.co/api/v2/pokemon"
+var arrayDePokemones = []
 let links = document.getElementById("links");
 
-async function traerPokemones(url) {
-    //Reiniciamos pokemones actuales
-    pokemonsList.innerHTML = "";
-    // Llamamos a la API de pokemon con Fetch
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        // Obtenemos y recorremos a los primeros 20 pokemones obtenidos
-        for (let i of res.results) {
-          // Realizamos otra solicitud Fetch con la URL especifica del pokemon actual recorrido, para obtener datos mas especficos como la imagen
-          fetch(i.url)
-            .then(x => x.json())
-            .then(x => {
-              // Vamos pintando o ingresando la imagen y nombre del pokemon actual que se esta evaluando 
-              pokemonsList.innerHTML += `<div class="card">
-                                                  <img src="${x.sprites.front_default}" alt="">
-                                                  <p>${x.name}</p>
-                                                  
-                                              </div>`;
-            });
-        };
-        // Pintamos los enlaces de siguiente o anterior de la paginacion de los pokemones 
-        //Boton hacia atrás
-        links.innerHTML = (res.previous) ? `<button onclick="traerPokemones('${res.previous}')">Atrás</button>` : "";
-        //Botón hacia adelante
-        links.innerHTML += (res.next) ? `<button onclick="traerPokemones('${res.next}')">Siguiente</button>` : "";
+async function traerDatosDePokemon(url) {
+  let response = await fetch(url, {
+    method: "GET",
+  })
 
-      });
+  let data = await response.json();
 
+  return data;
+}
+
+async function funcionNueva(url) {
+
+  pokemonsList.innerHTML = "";
+
+  arrayDePokemones = await traerDatosDePokemon(url);
+
+  for (let i = 0; i < arrayDePokemones.results.length; i++) {
+    let aux = await traerDatosDePokemon(arrayDePokemones.results[i].url);
+    mostrarPokemon(aux)
+  }
+  
+  links.innerHTML = (arrayDePokemones.previous) ? `<button onclick="funcionNueva('` + arrayDePokemones.previous + `')">Atrás</button>` : "";
+  //Botón hacia adelante
+  links.innerHTML += (arrayDePokemones.next) ? `<button onclick="funcionNueva('` + arrayDePokemones.next + `')">Siguiente</button>` : "";
 
 }
 
-traerPokemones("https://pokeapi.co/api/v2/pokemon");
+funcionNueva(pokeApi)
+
+function mostrarPokemon(pokemon) {
+  pokemonsList.innerHTML += `<div class="card">
+                                                  <p>${pokemon.id}</p>
+                                                  <img src="${pokemon.sprites.front_default}" alt="">
+                                                  <p>${pokemon.name}</p>
+                                                  <p>Tipo: ${pokemon.types[0].type.name}</p>
+                                                  </div>`;
+}
+  
+async function filtrarPorPokemones() {
+  var pokemonGuardado = (document.getElementById("BusquedaPokemon").value)
+  var pokesNuevos = await traerDatosDePokemon('https://pokeapi.co/api/v2/pokemon?limit=1118')
+  
+  for (var i = 0; i < pokesNuevos.results.length; i++) {
+    if (pokemonGuardado == pokesNuevos.results[i].name) {
+      var pokemonEncontrado = await traerDatosDePokemon(pokesNuevos.results[i].url)
+      pokemonsList.innerHTML = "";
+      mostrarPokemon(pokemonEncontrado)
+      return 
+    }
+  }
+
+  alert("No se encontró el pokemon ingresado")
+  funcionNueva(pokeApi)
+  
+}
