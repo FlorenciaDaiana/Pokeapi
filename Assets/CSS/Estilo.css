@@ -1,0 +1,53 @@
+.fondo {
+    background-image:url(../Imagenes/Flying_Journey.png);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.header .navbar {
+    background-color: transparent !important;
+  }
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container-card{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card{
+    border: 2px solid gold; 
+    width: 300px;
+    height: 550px;
+    background-color: red;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 12px -1px #000000;
+}
+
+.card>img{
+    width: 100%;
+    border-bottom: 2px solid black;
+}
+
+.card>p{
+    text-align: center;
+    font-size: 20px;
+    margin-top: 8px;
+    color: white;
+}
+
+.link{
+    margin: auto;
+    text-align: center;
+    font-size: 20px;
+    padding: 30px;
+}
